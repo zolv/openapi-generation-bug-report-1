@@ -1,0 +1,39 @@
+test:
+   post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Parent'
+      responses:
+        200:
+          description: It's OK
+    
+components:
+  schemas:
+  
+    Parent:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+      discriminator:
+        propertyName: status
+        mapping:
+          CHILD_ONE: '#/components/schemas/ChildOne'
+          CHILD_TWO: '#/components/schemas/ChildTwo'
+
+    ChildOne:
+      properties:
+        status:
+          type: string
+      discriminator:
+        - $ref: '#/components/schemas/Parent'
+        - type: object
+        
+    ChildTwo:
+      allOf:
+        - $ref: '#/components/schemas/Parent'
+        - type: object
+        
